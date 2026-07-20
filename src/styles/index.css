@@ -2,6 +2,10 @@
    MASTER CSS ARCHITECTURE ENTRY POINT
    ========================================== */
 
+/* 0. Tailwind CSS v4 & Fonts */
+@import "tailwindcss";
+@import './fonts.css';
+
 /* 1. Design Tokens & Variables */
 @import './tokens.css';
 

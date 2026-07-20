@@ -16,7 +16,7 @@ const fragmentShaderSource = `
   uniform vec2 u_resolution;
 
   // Desaturated teal/slate & accentuated sage palette
-  const vec3 COL_BLACK = vec3(0.008, 0.014, 0.020);
+  const vec3 COL_BLACK = vec3(0.001, 0.002, 0.004);
   const vec3 COL_TEAL  = vec3(0.14, 0.28, 0.34);  // Muted, desaturated slate-teal
   const vec3 COL_SAGE  = vec3(0.682, 0.741, 0.600); // #AEBD99 (Sage)
 
@@ -165,7 +165,7 @@ export default function DitheringShader() {
     const buf = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buf);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-      -1,-1, 1,-1, -1,1, -1,1, 1,-1, 1,1
+      -1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1
     ]), gl.STATIC_DRAW);
 
     const aPos = gl.getAttribLocation(program, 'a_position');

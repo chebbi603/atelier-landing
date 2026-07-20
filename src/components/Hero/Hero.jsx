@@ -6,11 +6,15 @@ export default function Hero() {
   return (
     <section className="hero">
       <DitheringShader />
-      
+
       <div className="hero-content">
-        <h1 className="hero-title">Next-generation infrastructure</h1>
-        <p className="hero-sub">Built for high-performance teams scaling into the future.</p>
-        
+        <div className="hero-title flex gap-2">
+          We Put
+          <img src="./ai icon.svg" alt="AI Icon" className='w-16 pb-2 pr-6' />
+          To Work
+        </div>
+        <p className="hero-sub">Atelier embeds with ambitious teams to turn their hardest operational problems into production AI systems—designed, built, and run end to end.</p>
+
         <div className="hero-cta">
           <Button href="#">Get Started</Button>
         </div>

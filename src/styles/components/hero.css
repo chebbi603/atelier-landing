@@ -21,6 +21,11 @@
   gap: var(--space-md);
 }
 
+.hero-title {
+  font-family: var(--font-heading);
+  font-weight: 500;
+}
+
 .hero-cta {
   margin-top: var(--space-sm);
 }

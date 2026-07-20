@@ -17,14 +17,14 @@ export default function Button({
   if (href) {
     return (
       <a href={href} className={combinedClassName} {...props}>
-        {children}
+        <span className="btn-text">{children}</span>
       </a>
     );
   }
 
   return (
     <button type={type} onClick={onClick} className={combinedClassName} {...props}>
-      {children}
+      <span className="btn-text">{children}</span>
     </button>
   );
 }
