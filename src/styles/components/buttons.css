@@ -2,43 +2,45 @@
    BUTTON COMPONENT STYLES
    ========================================== */
 
-.btn-boxy {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 12px 26px;
-  background: var(--color-text-primary);
-  color: var(--color-bg-primary);
-  font-family: var(--font-body);
-  font-size: 0.90rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-              background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: none;
-  cursor: pointer;
-  border-radius: 0px;
-}
+@layer components {
+  .btn-boxy {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 26px;
+    background: var(--color-text-primary);
+    color: var(--color-bg-primary);
+    font-family: var(--font-body);
+    font-size: 0.90rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    user-select: none;
+    cursor: pointer;
+    border-radius: 0px;
+  }
 
-.btn-text {
-  display: inline-block;
-  text-transform: uppercase;
-  font-family: var(--font-heading);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
+  .btn-text {
+    display: inline-block;
+    text-transform: uppercase;
+    font-family: var(--font-heading);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
 
-/* Diagonal skew effect matching the logo slash on hover */
-.btn-boxy:hover {
-  background: #F3FF0B;
-  transform: skewX(-30deg);
-}
+  /* Diagonal skew effect matching the logo slash on hover */
+  .btn-boxy:hover {
+    background: #F3FF0B;
+    transform: skewX(-30deg);
+  }
 
-.btn-boxy:hover .btn-text {
-  transform: skewX(25deg);
-}
+  .btn-boxy:hover .btn-text {
+    transform: skewX(25deg);
+  }
 
-.btn-boxy:active {
-  background: #d0db0a;
-  transform: skewX(-25deg);
+  .btn-boxy:active {
+    background: #d0db0a;
+    transform: skewX(-25deg);
+  }
 }

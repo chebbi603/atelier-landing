@@ -2,66 +2,68 @@
    NAVBAR COMPONENT STYLES
    ========================================== */
 
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: var(--z-navbar);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-xl) var(--container-px);
-}
-
-.nav-brand {
-  display: flex;
-  align-items: center;
-  transition: opacity var(--transition-normal), transform var(--transition-normal);
-}
-
-.nav-brand:hover {
-  opacity: 0.88;
-}
-
-.nav-logo-img {
-  height: 28px;
-  width: auto;
-  object-fit: contain;
-  display: block;
-}
-
-.nav-right {
-  display: flex;
-  align-items: center;
-  gap: var(--space-xl);
-}
-
-.nav-link {
-  font-family: var(--font-primary);
-  font-size: 0.88rem;
-  font-weight: 500;
-  color: var(--color-text-secondary);
-  padding: var(--space-2xs) var(--space-xs);
-  border-radius: var(--radius-sm);
-  transition: color var(--transition-normal), background-color var(--transition-normal);
-}
-
-.nav-link:hover {
-  color: var(--color-text-primary);
-  background-color: rgba(255, 255, 255, 0.06);
-}
-
-.nav-link:active {
-  transform: scale(0.96);
-}
-
-@media (max-width: 640px) {
+@layer components {
   .navbar {
-    padding: var(--space-lg) var(--container-px-mobile);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: var(--z-navbar);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-xl) var(--container-px);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    transition: opacity var(--transition-normal), transform var(--transition-normal);
+  }
+
+  .nav-brand:hover {
+    opacity: 0.88;
   }
 
   .nav-logo-img {
-    height: 24px;
+    height: 28px;
+    width: auto;
+    object-fit: contain;
+    display: block;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: var(--space-xl);
+  }
+
+  .nav-link {
+    font-family: var(--font-primary);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    padding: var(--space-2xs) var(--space-xs);
+    border-radius: var(--radius-sm);
+    transition: color var(--transition-normal), background-color var(--transition-normal);
+  }
+
+  .nav-link:hover {
+    color: var(--color-text-primary);
+    background-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .nav-link:active {
+    transform: scale(0.96);
+  }
+
+  @media (max-width: 640px) {
+    .navbar {
+      padding: var(--space-lg) var(--container-px-mobile);
+    }
+
+    .nav-logo-img {
+      height: 24px;
+    }
   }
 }

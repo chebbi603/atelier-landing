@@ -8,9 +8,9 @@ export default function Hero() {
       <DitheringShader />
 
       <div className="hero-content">
-        <div className="hero-title flex gap-2">
+        <div className="hero-title flex gap-2 items-end">
           We Put
-          <img src="./ai icon.svg" alt="AI Icon" className='w-16 pb-2 pr-6' />
+          <img src="./ai icon.svg" alt="AI Icon" className='h-16 pb-3 pr-1' />
           To Work
         </div>
         <p className="hero-sub">Atelier embeds with ambitious teams to turn their hardest operational problems into production AI systems—designed, built, and run end to end.</p>

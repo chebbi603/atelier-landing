@@ -2,32 +2,34 @@
    TYPOGRAPHY SCALE & UTILITIES
    ========================================== */
 
-/* Headings: Clash Grotesk, Uppercase */
-h1, h2, h3, h4, h5, h6, .hero-title {
-  font-family: var(--font-heading);
-}
+@layer base {
+  /* Headings */
+  h1, h2, h3, h4, h5, h6, .hero-title {
+    font-family: var(--font-heading);
+  }
 
-.hero-title {
-  font-size: clamp(2.4rem, 4.5vw, 3.4rem);
-  font-weight: 500;
-  letter-spacing: 0.02em;
-  color: var(--color-text-primary);
-  line-height: 1.08;
-}
+  .hero-title {
+    font-size: clamp(2.4rem, 4.5vw, 3.4rem);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: var(--color-text-primary);
+    line-height: 1.08;
+  }
 
-/* Body Text: Manrope */
-p, .hero-sub, .nav-link {
-  font-family: var(--font-body);
-}
+  /* Body Text */
+  p, .hero-sub, .nav-link {
+    font-family: var(--font-body);
+  }
 
-.hero-sub {
-  font-size: clamp(0.95rem, 1.4vw, 1.1rem);
-  font-weight: 400;
-  color: var(--color-text-secondary);
-  line-height: 1.6;
-  letter-spacing: -0.01em;
-}
+  .hero-sub {
+    font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+    font-weight: 400;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+  }
 
-.text-subtle {
-  color: var(--color-text-muted);
+  .text-subtle {
+    color: var(--color-text-muted);
+  }
 }

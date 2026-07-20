@@ -2,17 +2,14 @@
    MASTER CSS ARCHITECTURE ENTRY POINT
    ========================================== */
 
-/* 0. Tailwind CSS v4 & Fonts */
-@import "tailwindcss";
+/* 1. Design Tokens & Font Definitions */
 @import './fonts.css';
-
-/* 1. Design Tokens & Variables */
 @import './tokens.css';
 
 /* 2. Reset & Baseline Setup */
 @import './reset.css';
 
-/* 3. Typography Scale & Fonts */
+/* 3. Typography Scale & Hierarchy */
 @import './typography.css';
 
 /* 4. Component Modules */
@@ -20,3 +17,6 @@
 @import './components/navbar.css';
 @import './components/hero.css';
 @import './components/footer.css';
+
+/* 5. Tailwind CSS v4 Utilities (Placed last so Tailwind classes override defaults) */
+@import "tailwindcss";
