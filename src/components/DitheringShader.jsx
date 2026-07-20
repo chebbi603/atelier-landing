@@ -17,6 +17,8 @@ const fragmentShaderSource = `
   uniform vec2 u_mouse;       // smoothed mouse pos (0..1)
   uniform vec2 u_mouseVel;    // velocity vector
   uniform float u_mouseSpeed; // speed magnitude (0..1)
+  uniform float u_hover;      // button hover light accentuation (0..1)
+  uniform float u_introLight; // intro light level (0.15 -> 1.0)
 
   // Curated color palette
   const vec3 COL_BLACK = vec3(0.001, 0.002, 0.004);
@@ -104,35 +106,40 @@ const fragmentShaderSource = `
     float falloff = 1.0 - smoothstep(0.0, 1.65 * aspect, streamPos);
     falloff = pow(max(0.0, falloff), 1.2);
 
-    float sourceGlow = exp(-length(trUV) * 1.3) * 0.35;
-    float finalLight = (rayPattern * falloff + sourceGlow) * 1.05;
+    // --- Button Hover Light Accentuation ---
+    float hoverGlow = u_hover * 0.35;
+    float hoverRayIntensity = 1.0 + u_hover * 0.55;
+
+    // u_introLight smoothly swells from 0.15 (dark ambient) -> 1.0 after preloader completes
+    float sourceGlow = exp(-length(trUV) * 1.3) * (0.35 + hoverGlow) * u_introLight;
+    float finalLight = (rayPattern * falloff * hoverRayIntensity * u_introLight + sourceGlow) * 1.05;
 
     // --- Interactive Darkening & Shadow Density ---
-    // Moving mouse stirs deep volumetric shadows into the light
     float shadowDarkening = mouseField * (0.35 + u_mouseSpeed * 0.65);
     finalLight = mix(finalLight, finalLight * 0.2, shadowDarkening * 0.7);
     finalLight = clamp(finalLight, 0.0, 1.0);
 
     // --- Color Palette Mapping ---
-    float tTeal = smoothstep(0.02, 0.40, finalLight);
-    float tSage = smoothstep(0.32, 0.78, finalLight);
+    float tTeal = smoothstep(0.02 - u_hover * 0.02, 0.40 + u_hover * 0.10, finalLight);
+    float tSage = smoothstep(0.32 - u_hover * 0.08, 0.78, finalLight);
 
     vec3 color = mix(COL_BLACK, COL_TEAL, tTeal);
     color = mix(color, COL_SAGE, tSage);
 
-    // --- Refined Micro-Film Grain & Tactile Noise ---
-    // Smooth multi-frequency grain that subtly intensifies in dark volumetric shadows
-    float n1 = hash(gl_FragCoord.xy + fract(u_time * 17.31) * 100.0) - 0.5;
-    float n2 = hash(gl_FragCoord.xy * 0.5 + fract(u_time * 29.83) * 100.0) - 0.5;
-    float n3 = hash(gl_FragCoord.xy * 2.0 + fract(u_time * 43.19) * 100.0) - 0.5;
+    // --- Zero-Flicker Smooth Continuous Film Grain Drift ---
+    // Smooth Hermite-interpolated noise (noise vs discrete hash) eliminates all pixel flickering
+    float tSlow = u_time * 0.06;
+    vec2 grainCoord = gl_FragCoord.xy * 0.75;
 
-    float grainIntensity = 0.045 + shadowDarkening * 0.06;
-    float grain = (n1 * 0.5 + n2 * 0.3 + n3 * 0.2) * grainIntensity;
+    float g1 = noise(grainCoord + vec2(tSlow * 1.4, tSlow * 0.9)) - 0.5;
+    float g2 = noise(grainCoord * 1.7 - vec2(tSlow * 1.1, tSlow * 1.5)) - 0.5;
 
-    color += grain;
-    
-    // Subtle shadow contrast enhancement
-    color *= (1.0 - shadowDarkening * 0.15);
+    float grainPattern = g1 * 0.65 + g2 * 0.35;
+    float grainIntensity = 0.22 + shadowDarkening * 0.07;
+
+    // Multiplicative & additive grain blend for silky non-flickering film texture
+    color = color * (1.0 + grainPattern * grainIntensity * 1.3) + vec3(grainPattern * grainIntensity * 0.3);
+    color *= (1.0 - shadowDarkening * 0.12);
 
     gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
   }
@@ -162,9 +169,19 @@ function createProgram(gl, vs, fs) {
   return program;
 }
 
-export default function DitheringShader() {
+export default function DitheringShader({ isHovered = false, isPreloaded = false }) {
   const canvasRef = useRef(null);
   const animRef = useRef(null);
+  const hoverRef = useRef(isHovered);
+  const preloadedRef = useRef(isPreloaded);
+
+  useEffect(() => {
+    hoverRef.current = isHovered;
+  }, [isHovered]);
+
+  useEffect(() => {
+    preloadedRef.current = isPreloaded;
+  }, [isPreloaded]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -192,8 +209,10 @@ export default function DitheringShader() {
     const uMouseLoc = gl.getUniformLocation(program, 'u_mouse');
     const uMouseVelLoc = gl.getUniformLocation(program, 'u_mouseVel');
     const uMouseSpeedLoc = gl.getUniformLocation(program, 'u_mouseSpeed');
+    const uHoverLoc = gl.getUniformLocation(program, 'u_hover');
+    const uIntroLightLoc = gl.getUniformLocation(program, 'u_introLight');
 
-    // Smooth Spring-Damped Physics State
+    // Physics State
     const mouseState = {
       targetX: 0.5,
       targetY: 0.5,
@@ -202,6 +221,8 @@ export default function DitheringShader() {
       velX: 0,
       velY: 0,
       speed: 0,
+      hoverVal: 0.0,
+      introLightVal: 0.15,
     };
 
     const onMouseMove = (e) => {
@@ -224,14 +245,12 @@ export default function DitheringShader() {
     const t0 = performance.now();
 
     const render = () => {
-      // Spring lerp for liquid-smooth inertia
       const prevX = mouseState.currentX;
       const prevY = mouseState.currentY;
 
       mouseState.currentX += (mouseState.targetX - mouseState.currentX) * 0.08;
       mouseState.currentY += (mouseState.targetY - mouseState.currentY) * 0.08;
 
-      // Compute velocity delta & smooth speed magnitude
       const instVelX = mouseState.currentX - prevX;
       const instVelY = mouseState.currentY - prevY;
 
@@ -240,6 +259,14 @@ export default function DitheringShader() {
 
       const rawSpeed = Math.hypot(mouseState.velX, mouseState.velY) * 15.0;
       mouseState.speed += (Math.min(rawSpeed, 1.0) - mouseState.speed) * 0.1;
+
+      // Lerp hover value
+      const targetHover = hoverRef.current ? 1.0 : 0.0;
+      mouseState.hoverVal += (targetHover - mouseState.hoverVal) * 0.07;
+
+      // Lerp intro light level
+      const targetIntro = preloadedRef.current ? 1.0 : 0.15;
+      mouseState.introLightVal += (targetIntro - mouseState.introLightVal) * 0.035;
 
       gl.useProgram(program);
       gl.enableVertexAttribArray(aPos);
@@ -251,6 +278,8 @@ export default function DitheringShader() {
       gl.uniform2f(uMouseLoc, mouseState.currentX, mouseState.currentY);
       gl.uniform2f(uMouseVelLoc, mouseState.velX, mouseState.velY);
       gl.uniform1f(uMouseSpeedLoc, mouseState.speed);
+      gl.uniform1f(uHoverLoc, mouseState.hoverVal);
+      gl.uniform1f(uIntroLightLoc, mouseState.introLightVal);
 
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       animRef.current = requestAnimationFrame(render);
