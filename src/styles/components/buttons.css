@@ -40,5 +40,5 @@
 
 .btn-boxy:active {
   background: #d0db0a;
-  transform: skewX(-14deg) scale(0.96);
+  transform: skewX(-25deg);
 }

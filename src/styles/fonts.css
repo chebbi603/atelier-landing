@@ -67,3 +67,39 @@
   font-display: swap;
   font-style: normal;
 }
+
+/* ==========================================
+   NIMBUS SANS FONT DEFINITIONS (@font-face)
+   ========================================== */
+
+@font-face {
+  font-family: 'Nimbus Sans';
+  src: url('/fonts/nimbus-sans/NimbusSanL-Regu.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nimbus Sans';
+  src: url('/fonts/nimbus-sans/NimbusSanL-ReguItal.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nimbus Sans';
+  src: url('/fonts/nimbus-sans/NimbusSanL-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Nimbus Sans';
+  src: url('/fonts/nimbus-sans/NimbusSanL-BoldItal.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}

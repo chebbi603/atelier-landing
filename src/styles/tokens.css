@@ -4,8 +4,11 @@
 
 :root {
   /* --- Typography --- */
-  --font-heading: 'Clash Grotesk', 'Clash Grotesk Variable', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: 'Clash Grotesk Variable', Georgia, serif;
+  --font-serif: 'Young Serif', Georgia, serif;
+  --font-body: 'Nimbus Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-nimbus: 'Nimbus Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-manrope: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-primary: var(--font-body);
   --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Monaco, Consolas, monospace;
 

@@ -1,5 +1,6 @@
 import Navbar from './components/Navbar/Navbar';
 import Hero from './components/Hero/Hero';
+import Footer from './components/Footer/Footer';
 import './styles/index.css';
 
 export default function App() {
@@ -7,6 +8,7 @@ export default function App() {
     <div className="page">
       <Navbar />
       <Hero />
+      <Footer />
     </div>
   );
 }

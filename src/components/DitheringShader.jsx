@@ -14,11 +14,14 @@ const fragmentShaderSource = `
   varying vec2 v_uv;
   uniform float u_time;
   uniform vec2 u_resolution;
+  uniform vec2 u_mouse;       // smoothed mouse pos (0..1)
+  uniform vec2 u_mouseVel;    // velocity vector
+  uniform float u_mouseSpeed; // speed magnitude (0..1)
 
-  // Desaturated teal/slate & accentuated sage palette
+  // Curated color palette
   const vec3 COL_BLACK = vec3(0.001, 0.002, 0.004);
-  const vec3 COL_TEAL  = vec3(0.14, 0.28, 0.34);  // Muted, desaturated slate-teal
-  const vec3 COL_SAGE  = vec3(0.682, 0.741, 0.600); // #AEBD99 (Sage)
+  const vec3 COL_TEAL  = vec3(0.14, 0.28, 0.34);  // Muted slate-teal
+  const vec3 COL_SAGE  = vec3(0.682, 0.741, 0.600); // #AEBD99 Sage accent
 
   float hash(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -35,6 +38,7 @@ const fragmentShaderSource = `
     return mix(mix(a, b, f.x), mix(c, d, f.x), f.y);
   }
 
+  // Multi-scale Fractal Brownian Motion for volumetric smoke/mist
   float fbm(vec2 p) {
     float v = 0.0;
     float a = 0.5;
@@ -47,23 +51,31 @@ const fragmentShaderSource = `
     return v;
   }
 
-  float bayer4(vec2 pos) {
-    vec2 p = floor(mod(pos, 4.0));
-    float m = mod(floor(p.x / 2.0) + floor(p.y / 2.0) * 2.0, 4.0) * 4.0;
-    m += mod(mod(p.x, 2.0) + mod(p.y, 2.0) * 2.0, 4.0);
-    return m / 16.0;
-  }
-
   void main() {
     vec2 uv = v_uv;
     float aspect = u_resolution.x / u_resolution.y;
 
-    // Origin at Top-Right
-    vec2 trUV = vec2((1.0 - uv.x) * aspect, 1.0 - uv.y);
+    // --- Smooth Gaussian Mouse Interaction Field ---
+    vec2 mDiff = uv - u_mouse;
+    mDiff.x *= aspect;
+    float mDistSq = dot(mDiff, mDiff);
+    
+    // Broad, silky smooth Gaussian falloff (no harsh edges)
+    float mouseField = exp(-mDistSq / 0.045); 
 
-    float t = u_time * 0.25;
+    // Fluid domain displacement: cursor movement stirs & shifts the mist coordinates
+    vec2 velOffset = u_mouseVel * aspect * mouseField * 0.45;
+    vec2 curlWarp = vec2(
+      noise(uv * 4.0 + vec2(u_time * 0.2, 0.0)) - 0.5,
+      noise(uv * 4.0 + vec2(0.0, u_time * 0.2)) - 0.5
+    ) * mouseField * 0.08;
 
-    // Parallel ray direction coming from Top-Right (~32 deg)
+    vec2 warpedUV = uv + velOffset + curlWarp;
+
+    // --- Light Rays & Volumetric Mist ---
+    vec2 trUV = vec2((1.0 - warpedUV.x) * aspect, 1.0 - warpedUV.y);
+    float t = u_time * 0.22;
+
     float angle = 0.56;
     vec2 rayDir = vec2(cos(angle), sin(angle));
     vec2 perpDir = vec2(-sin(angle), cos(angle));
@@ -71,7 +83,7 @@ const fragmentShaderSource = `
     float streamPos = dot(trUV, rayDir);
     float bandPos = dot(trUV, perpDir);
 
-    // --- Base Parallel Light Beams ---
+    // Light beams
     float bands = 0.0;
     bands += sin(bandPos * 8.0  + t * 0.5) * 0.35;
     bands += sin(bandPos * 16.0 - t * 0.3) * 0.20;
@@ -79,42 +91,48 @@ const fragmentShaderSource = `
     bands += sin(bandPos * 4.0  + t * 0.2) * 0.25;
     bands = bands * 0.5 + 0.5;
 
-    // --- Organic Noise & Shadows ---
+    // Organic FBM noise fields
     vec2 mistUV1 = vec2(bandPos * 2.5 + t * 0.15, streamPos * 1.5 - t * 0.6);
     float mist1 = fbm(mistUV1);
 
     vec2 shadowUV = vec2(bandPos * 1.2 - t * 0.1, streamPos * 0.8 + t * 0.3);
     float shadowPatches = fbm(shadowUV);
-    
-    float brightnessModulation = smoothstep(0.1, 0.85, shadowPatches) * 0.7 + 0.35;
 
+    float brightnessModulation = smoothstep(0.1, 0.85, shadowPatches) * 0.7 + 0.35;
     float rayPattern = mix(bands, mist1, 0.5) * brightnessModulation;
 
-    // --- Falloff Curve from Top-Right ---
     float falloff = 1.0 - smoothstep(0.0, 1.65 * aspect, streamPos);
     falloff = pow(max(0.0, falloff), 1.2);
 
     float sourceGlow = exp(-length(trUV) * 1.3) * 0.35;
-
     float finalLight = (rayPattern * falloff + sourceGlow) * 1.05;
+
+    // --- Interactive Darkening & Shadow Density ---
+    // Moving mouse stirs deep volumetric shadows into the light
+    float shadowDarkening = mouseField * (0.35 + u_mouseSpeed * 0.65);
+    finalLight = mix(finalLight, finalLight * 0.2, shadowDarkening * 0.7);
     finalLight = clamp(finalLight, 0.0, 1.0);
 
-    // --- Color Mapping (Desaturated Blue/Slate, Accentuated #AEBD99 Sage) ---
-    vec3 color;
+    // --- Color Palette Mapping ---
     float tTeal = smoothstep(0.02, 0.40, finalLight);
-    // Accentuate #AEBD99: starts spreading earlier & dominates mid-to-bright regions
     float tSage = smoothstep(0.32, 0.78, finalLight);
 
-    color = mix(COL_BLACK, COL_TEAL, tTeal);
+    vec3 color = mix(COL_BLACK, COL_TEAL, tTeal);
     color = mix(color, COL_SAGE, tSage);
 
-    // --- Dithering & Fine Grain ---
-    vec2 pixelPos = gl_FragCoord.xy / 2.0;
-    float dither = (bayer4(pixelPos) - 0.5) * 0.15;
-    color += dither;
+    // --- Refined Micro-Film Grain & Tactile Noise ---
+    // Smooth multi-frequency grain that subtly intensifies in dark volumetric shadows
+    float n1 = hash(gl_FragCoord.xy + fract(u_time * 17.31) * 100.0) - 0.5;
+    float n2 = hash(gl_FragCoord.xy * 0.5 + fract(u_time * 29.83) * 100.0) - 0.5;
+    float n3 = hash(gl_FragCoord.xy * 2.0 + fract(u_time * 43.19) * 100.0) - 0.5;
 
-    float grain = (hash(gl_FragCoord.xy + fract(u_time * 7.0) * 1000.0) - 0.5) * 0.05;
+    float grainIntensity = 0.045 + shadowDarkening * 0.06;
+    float grain = (n1 * 0.5 + n2 * 0.3 + n3 * 0.2) * grainIntensity;
+
     color += grain;
+    
+    // Subtle shadow contrast enhancement
+    color *= (1.0 - shadowDarkening * 0.15);
 
     gl_FragColor = vec4(clamp(color, 0.0, 1.0), 1.0);
   }
@@ -171,6 +189,28 @@ export default function DitheringShader() {
     const aPos = gl.getAttribLocation(program, 'a_position');
     const uTime = gl.getUniformLocation(program, 'u_time');
     const uRes = gl.getUniformLocation(program, 'u_resolution');
+    const uMouseLoc = gl.getUniformLocation(program, 'u_mouse');
+    const uMouseVelLoc = gl.getUniformLocation(program, 'u_mouseVel');
+    const uMouseSpeedLoc = gl.getUniformLocation(program, 'u_mouseSpeed');
+
+    // Smooth Spring-Damped Physics State
+    const mouseState = {
+      targetX: 0.5,
+      targetY: 0.5,
+      currentX: 0.5,
+      currentY: 0.5,
+      velX: 0,
+      velY: 0,
+      speed: 0,
+    };
+
+    const onMouseMove = (e) => {
+      const rect = canvas.getBoundingClientRect();
+      mouseState.targetX = (e.clientX - rect.left) / rect.width;
+      mouseState.targetY = 1.0 - (e.clientY - rect.top) / rect.height;
+    };
+
+    window.addEventListener('mousemove', onMouseMove);
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -184,12 +224,34 @@ export default function DitheringShader() {
     const t0 = performance.now();
 
     const render = () => {
+      // Spring lerp for liquid-smooth inertia
+      const prevX = mouseState.currentX;
+      const prevY = mouseState.currentY;
+
+      mouseState.currentX += (mouseState.targetX - mouseState.currentX) * 0.08;
+      mouseState.currentY += (mouseState.targetY - mouseState.currentY) * 0.08;
+
+      // Compute velocity delta & smooth speed magnitude
+      const instVelX = mouseState.currentX - prevX;
+      const instVelY = mouseState.currentY - prevY;
+
+      mouseState.velX += (instVelX - mouseState.velX) * 0.15;
+      mouseState.velY += (instVelY - mouseState.velY) * 0.15;
+
+      const rawSpeed = Math.hypot(mouseState.velX, mouseState.velY) * 15.0;
+      mouseState.speed += (Math.min(rawSpeed, 1.0) - mouseState.speed) * 0.1;
+
       gl.useProgram(program);
       gl.enableVertexAttribArray(aPos);
       gl.bindBuffer(gl.ARRAY_BUFFER, buf);
       gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+
       gl.uniform1f(uTime, (performance.now() - t0) / 1000);
       gl.uniform2f(uRes, canvas.width, canvas.height);
+      gl.uniform2f(uMouseLoc, mouseState.currentX, mouseState.currentY);
+      gl.uniform2f(uMouseVelLoc, mouseState.velX, mouseState.velY);
+      gl.uniform1f(uMouseSpeedLoc, mouseState.speed);
+
       gl.drawArrays(gl.TRIANGLES, 0, 6);
       animRef.current = requestAnimationFrame(render);
     };
@@ -197,6 +259,7 @@ export default function DitheringShader() {
     render();
 
     return () => {
+      window.removeEventListener('mousemove', onMouseMove);
       window.removeEventListener('resize', resize);
       if (animRef.current) cancelAnimationFrame(animRef.current);
       gl.deleteProgram(program);
