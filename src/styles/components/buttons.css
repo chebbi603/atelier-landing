@@ -7,11 +7,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 26px;
+    padding: 10px 20px;
     background: var(--color-text-primary);
     color: var(--color-bg-primary);
     font-family: var(--font-body);
-    font-size: 0.90rem;
+    font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -26,12 +26,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 26px;
+    padding: 10px 20px;
     background: transparent;
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.4);
     font-family: var(--font-body);
-    font-size: 0.90rem;
+    font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -41,6 +41,13 @@
     user-select: none;
     cursor: pointer;
     border-radius: 0px;
+  }
+
+  @media (min-width: 768px) {
+    .btn-boxy, .btn-outline {
+      padding: 12px 26px;
+      font-size: 0.90rem;
+    }
   }
 
   .btn-text {
