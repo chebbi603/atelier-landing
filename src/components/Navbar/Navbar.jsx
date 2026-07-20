@@ -28,15 +28,15 @@ export default function Navbar({ isPreloaded = false }) {
   }, [isPreloaded]);
 
   return (
-    <nav ref={navRef} className="navbar fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-7 md:px-14 py-6 md:py-8 pointer-events-auto">
+    <nav ref={navRef} className="navbar fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 md:px-14 py-6 md:py-8 pointer-events-auto">
       <a href="#" className="nav-brand flex items-center transition-opacity duration-300 hover:opacity-85 opacity-0" aria-label="Atelier Home">
         <img src="/logo.png" alt="Atelier Logo" className="nav-logo-img h-6 md:h-7 w-auto object-contain block" />
       </a>
       <div className="nav-right flex items-center gap-6 md:gap-8">
-        <a href="#about" className="nav-link font-['Nimbus_Sans',sans-serif] text-xs md:text-sm font-medium text-white/70 hover:text-white transition-colors duration-200 opacity-0">
+        <a href="#about" className="nav-link font-['Nimbus_Sans',sans-serif] text-sm font-medium text-white/70 hover:text-white transition-colors duration-200 opacity-0">
           About
         </a>
-        <a href="#contact" className="nav-link font-['Nimbus_Sans',sans-serif] text-xs md:text-sm font-medium text-white/70 hover:text-white transition-colors duration-200 inline-flex items-center gap-1 opacity-0">
+        <a href="#contact" className="nav-link font-['Nimbus_Sans',sans-serif] text-sm font-medium text-white/70 hover:text-white transition-colors duration-200 inline-flex items-center gap-1 opacity-0">
           <span>Contact</span>
           <ArrowUpRight size={14} weight="bold" className="opacity-60" />
         </a>

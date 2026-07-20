@@ -103,8 +103,8 @@ export default function Hero({ isPreloaded = false }) {
     <section className="relative w-full h-screen overflow-hidden" ref={heroRef}>
       <DitheringShader isHovered={isButtonHovered} isPreloaded={isPreloaded} />
 
-      <div className="absolute z-10 bottom-[72px] sm:bottom-20 md:bottom-[calc(var(--space-3xl)+32px)] left-6 right-6 md:left-14 md:right-14 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 md:gap-6">
-        <div className="flex flex-col items-start gap-2 max-w-[620px]">
+      <div className="absolute z-10 bottom-[125px] sm:bottom-28 md:bottom-[calc(var(--space-3xl)+32px)] left-6 right-6 md:left-14 md:right-14 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 md:gap-6">
+        <div className="flex flex-col items-start gap-2.5 max-w-[620px]">
           <div className="hero-title flex flex-wrap gap-1.5 md:gap-2 items-baseline font-['Clash_Grotesk_Variable',Georgia,serif] text-[clamp(2.35rem,8.5vw,3.4rem)] font-medium tracking-[-1px] md:tracking-[-1.5px] uppercase text-white leading-[1.05]">
             <span className="hero-title-item opacity-0">We Put</span>
             <img
@@ -115,15 +115,15 @@ export default function Hero({ isPreloaded = false }) {
             <span className="hero-title-item opacity-0">To Work</span>
           </div>
 
-          <p className="hero-sub text-xs sm:text-base md:text-[clamp(0.95rem,1.4vw,1.1rem)] font-normal text-white/80 leading-[1.45] sm:leading-[1.5] md:leading-[1.6] tracking-[-0.01em] font-['Nimbus_Sans',sans-serif] opacity-0">
+          <p className="hero-sub text-sm sm:text-base md:text-[clamp(0.95rem,1.4vw,1.1rem)] font-normal text-white/85 leading-[1.5] md:leading-[1.6] tracking-[-0.01em] font-['Nimbus_Sans',sans-serif] opacity-0">
             Atelier works alongside your team to ship AI systems that create measurable operational value.
           </p>
 
           {/* Super Clean Cycling Accent Text */}
-          <div className="hero-tag opacity-0 mt-0.5 sm:mt-1">
+          <div className="hero-tag opacity-0 mt-1">
             <span
               ref={phraseRef}
-              className="text-xs sm:text-base md:text-[clamp(0.95rem,1.4vw,1.1rem)] font-medium text-[#F3FF0B] font-['Nimbus_Sans',sans-serif] tracking-[-0.01em] block select-none"
+              className="text-sm sm:text-base md:text-[clamp(0.95rem,1.4vw,1.1rem)] font-medium text-[#F3FF0B] font-['Nimbus_Sans',sans-serif] tracking-[-0.01em] block select-none"
             >
               {cyclingPhrases[phraseIndex]}
             </span>
@@ -131,7 +131,7 @@ export default function Hero({ isPreloaded = false }) {
         </div>
 
         {/* Stack of Equal-Width Buttons */}
-        <div className="hero-cta flex flex-col gap-2 sm:gap-3 w-full sm:w-[260px] self-start md:self-end mt-1.5 md:mt-0 opacity-0">
+        <div className="hero-cta flex flex-col gap-2.5 sm:gap-3 w-full sm:w-[260px] self-start md:self-end mt-1.5 md:mt-0 opacity-0">
           <div
             className="w-full"
             onMouseEnter={() => setIsButtonHovered(true)}

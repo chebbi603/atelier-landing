@@ -7,11 +7,11 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px;
+    padding: 11px 22px;
     background: var(--color-text-primary);
     color: var(--color-bg-primary);
     font-family: var(--font-body);
-    font-size: 0.85rem;
+    font-size: 0.90rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -26,12 +26,12 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 10px 20px;
+    padding: 11px 22px;
     background: transparent;
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.4);
     font-family: var(--font-body);
-    font-size: 0.85rem;
+    font-size: 0.90rem;
     font-weight: 600;
     letter-spacing: -0.01em;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
