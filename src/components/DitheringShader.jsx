@@ -262,7 +262,7 @@ export default function DitheringShader({ isHovered = false, isPreloaded = false
 
       // Lerp hover value
       const targetHover = hoverRef.current ? 1.0 : 0.0;
-      mouseState.hoverVal += (targetHover - mouseState.hoverVal) * 0.07;
+      mouseState.hoverVal += (targetHover - mouseState.hoverVal) * 0.02;
 
       // Lerp intro light level
       const targetIntro = preloadedRef.current ? 1.0 : 0.15;

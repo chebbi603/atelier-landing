@@ -29,7 +29,7 @@ export default function Hero({ isPreloaded = false, onHoverChange }) {
       tl.fromTo(
         '.hero-center-slash',
         { opacity: 0 },
-        { opacity: 0.5, duration: 1.2, ease: 'power2.out' },
+        { opacity: 0.4, duration: 1.2, ease: 'power2.out' },
         0.1
       );
 
@@ -37,11 +37,11 @@ export default function Hero({ isPreloaded = false, onHoverChange }) {
       tl.fromTo(
         '.hero-title-item',
         { opacity: 0, filter: 'blur(20px)', y: 45, scale: 0.95 },
-        { opacity: 1, filter: 'blur(0px)', y: 0, scale: 1, stagger: 0.15, duration: 1.3 },
+        { opacity: 1, filter: 'blur(0px)', y: 0, scale: 1, stagger: 0.12, duration: 1.3 },
         0.2
       );
 
-      // 3. AI Icon floating / back-out scale
+      // 3. AI Icon & Arrow SVG floating / back-out scale
       tl.fromTo(
         '.hero-icon',
         { rotation: -12, scale: 0.7 },
@@ -118,14 +118,25 @@ export default function Hero({ isPreloaded = false, onHoverChange }) {
 
       <div className="absolute z-10 bottom-[125px] sm:bottom-28 md:bottom-[calc(var(--space-3xl)+32px)] left-6 right-6 md:left-14 md:right-14 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 md:gap-6">
         <div className="flex flex-col items-start gap-2.5 max-w-[620px]">
-          <div className="hero-title flex flex-wrap gap-1.5 md:gap-2 items-baseline font-['Clash_Grotesk_Variable',Georgia,serif] text-[clamp(2.35rem,8.5vw,3.4rem)] font-medium tracking-[-1px] md:tracking-[-1.5px] uppercase text-white leading-[1.05]">
+          <div className="hero-title flex flex-wrap gap-1 md:gap-0 items-baseline font-['Clash_Grotesk_Variable',Georgia,serif] text-[clamp(2.35rem,8.5vw,3.4rem)] font-medium tracking-[-1px] md:tracking-[-1.5px] uppercase text-white leading-[1.05]">
+            {/* Line 1: WE PUT [A/] */}
             <span className="hero-title-item opacity-0">We Put</span>
             <img
               src="./ai icon.svg"
               alt="AI Icon"
-              className="hero-icon hero-title-item h-[0.94em] w-auto translate-y-[0.04em] opacity-0 inline-block align-baseline"
+              className="hero-icon hero-title-item h-[0.7em] w-auto translate-y-[0.04em] opacity-0 inline-block align-baseline"
             />
-            <span className="hero-title-item opacity-0">To Work</span>
+
+            {/* Line break */}
+            <div className="w-full basis-full h-0" />
+
+            {/* Line 2: [arrow.svg] TO WORK */}
+            <img
+              src="./arrow.svg"
+              alt="Arrow Icon"
+              className="hero-icon hero-title-item h-[0.7em] w-auto translate-y-[0.04em] pr-1 opacity-0 inline-block align-baseline"
+            />
+            <span className="hero-title-item opacity-0">Work</span>
           </div>
 
           <p className="hero-sub text-sm sm:text-base md:text-[clamp(0.95rem,1.4vw,1.1rem)] font-normal text-white/85 leading-[1.5] md:leading-[1.6] tracking-[-0.01em] font-['Nimbus_Sans',sans-serif] opacity-0">
