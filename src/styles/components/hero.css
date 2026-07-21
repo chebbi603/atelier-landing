@@ -33,6 +33,143 @@
     margin-top: var(--space-sm);
   }
 
+  /* --- Smooth Interactive Centerpiece Slash & Masked Slideshow --- */
+  .hero-slash-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    z-index: 20;
+    cursor: pointer;
+    pointer-events: auto;
+    opacity: 0.4;
+    transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 500ms ease,
+                filter 500ms ease;
+    will-change: transform, opacity;
+  }
+
+  /* Drastic scale-up and full opacity reveal on hover */
+  .hero-slash-container:hover,
+  .hero-slash-container.is-hovered {
+    transform: translate(-50%, -50%) scale(1) !important;
+    opacity: 1 !important;
+  }
+
+  /* Subtle breathing pulse keyframes for default unhovered slash state */
+  @keyframes slashPulse {
+    0%, 100% {
+      box-shadow: 0 0 16px rgba(243, 255, 11, 0.12);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 28px rgba(243, 255, 11, 0.32);
+      border-color: rgba(243, 255, 11, 0.55);
+    }
+  }
+
+  /* Default state: EXACT match to Preloader slash (w-7 h-40) with subtle ambient pulse */
+  .hero-slash-frame {
+    position: relative;
+    width: 1.75rem; /* w-7 (28px) */
+    height: 10rem;  /* h-40 (160px) */
+    transform: skewX(-35deg);
+    border: 1px solid rgba(255, 255, 255, 0.35);
+    border-radius: 1px;
+    overflow: hidden;
+    background: transparent;
+    animation: slashPulse 3.8s ease-in-out infinite alternate;
+    transition: width 600ms cubic-bezier(0.16, 1, 0.3, 1),
+                height 600ms cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 450ms ease,
+                box-shadow 600ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Highlighted state on hover: pause pulse animation and expand to widescreen picture viewport */
+  .hero-slash-container:hover .hero-slash-frame,
+  .hero-slash-container.is-hovered .hero-slash-frame {
+    animation-play-state: paused;
+    width: 13.5rem;
+    height: 17.5rem;
+    border: 1.5px solid #F3FF0B;
+    box-shadow: 0 0 60px rgba(243, 255, 11, 0.65), inset 0 0 30px rgba(243, 255, 11, 0.3);
+  }
+
+  @media (min-width: 768px) {
+    .hero-slash-container:hover .hero-slash-frame,
+    .hero-slash-container.is-hovered .hero-slash-frame {
+      width: 18rem;
+      height: 22.5rem;
+    }
+  }
+
+  /* Counter-skew inner container to keep photos upright without clipping corners */
+  .hero-slash-inner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 450%;
+    height: 160%;
+    transform: translate(-50%, -50%) skewX(35deg);
+    pointer-events: none;
+  }
+
+  /* Slideshow Image Styling */
+  .hero-slash-slide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.12);
+    transition: opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 1200ms cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Default state: images hidden when unhovered */
+  .hero-slash-slide.active {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Hover state: pictures become 100% visible */
+  .hero-slash-container:hover .hero-slash-slide.active,
+  .hero-slash-container.is-hovered .hero-slash-slide.active {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.03);
+  }
+
+  /* Overlay gradient tint over slash slideshow */
+  .hero-slash-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.5) 100%);
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 500ms ease;
+  }
+
+  .hero-slash-container:hover .hero-slash-overlay,
+  .hero-slash-container.is-hovered .hero-slash-overlay {
+    opacity: 0.15;
+  }
+
+  /* --- Subtle Blur Target Classes for Surrounding Hero Elements --- */
+  .hero-blur-target {
+    transition: filter 500ms cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 500ms ease,
+                transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: filter, opacity, transform;
+  }
+
+  .hero-blur-target.is-slashed {
+    filter: blur(3.5px) brightness(0.85);
+    opacity: 0.7;
+    transform: scale(0.99);
+  }
+
   @media (max-width: 640px) {
     .hero-content {
       bottom: 40px;

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import gsap from 'gsap';
 import DitheringShader from '../DitheringShader';
 import Button from '../ui/Button';
+import HeroSlashSlideshow from './HeroSlashSlideshow';
 
 const cyclingPhrases = [
   'From hard problem to working system.',
@@ -10,6 +11,7 @@ const cyclingPhrases = [
 
 export default function Hero({ isPreloaded = false, onHoverChange }) {
   const [isButtonHovered, setIsButtonHovered] = useState(false);
+  const [isSlashHovered, setIsSlashHovered] = useState(false);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const heroRef = useRef(null);
   const phraseRef = useRef(null);
@@ -25,11 +27,11 @@ export default function Hero({ isPreloaded = false, onHoverChange }) {
         },
       });
 
-      // 1. Centerpiece yellow outline slash reveal - super subtle ambient watermark (Desktop only)
+      // 1. Centerpiece slash reveal
       tl.fromTo(
         '.hero-center-slash',
-        { opacity: 0 },
-        { opacity: 0.4, duration: 1.2, ease: 'power2.out' },
+        { opacity: 0, scale: 0.8 },
+        { opacity: 1, scale: 1, duration: 1.2, ease: 'back.out(1.5)' },
         0.1
       );
 
@@ -109,14 +111,15 @@ export default function Hero({ isPreloaded = false, onHoverChange }) {
 
   return (
     <section className="relative w-full h-screen overflow-hidden" ref={heroRef}>
-      <DitheringShader isHovered={isButtonHovered} isPreloaded={isPreloaded} />
+      <DitheringShader isHovered={isButtonHovered || isSlashHovered} isPreloaded={isPreloaded} />
 
-      {/* Desktop Centerpiece Yellow Outline Slash - Exact Preloader Match & Super Subtle Ambient Watermark */}
-      <div className="hero-center-slash hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none opacity-0">
-        <div className="w-7 h-40 -skew-x-[35deg] border border-[#fff]/35 rounded-[1px] shadow-[0_0_20px_rgba(243,255,11,0.12)]" />
-      </div>
+      {/* Interactive Desktop Centerpiece Slash with Counter-Skewed Slideshow Mask */}
+      <HeroSlashSlideshow
+        isHovered={isSlashHovered}
+        onHoverChange={setIsSlashHovered}
+      />
 
-      <div className="absolute z-10 bottom-[125px] sm:bottom-28 md:bottom-[calc(var(--space-3xl)+32px)] left-6 right-6 md:left-14 md:right-14 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 md:gap-6">
+      <div className={`hero-blur-target ${isSlashHovered ? 'is-slashed' : ''} absolute z-10 bottom-[125px] sm:bottom-28 md:bottom-[calc(var(--space-3xl)+32px)] left-6 right-6 md:left-14 md:right-14 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 md:gap-6`}>
         <div className="flex flex-col items-start gap-2.5 max-w-[620px]">
           <div className="hero-title flex flex-wrap gap-1 md:gap-0 items-baseline font-['Clash_Grotesk_Variable',Georgia,serif] text-[clamp(2.35rem,8.5vw,3.4rem)] font-medium tracking-[-1px] md:tracking-[-1.5px] uppercase text-white leading-[1.05]">
             {/* Line 1: WE PUT [A/] */}
@@ -175,3 +178,4 @@ export default function Hero({ isPreloaded = false, onHoverChange }) {
     </section>
   );
 }
+
