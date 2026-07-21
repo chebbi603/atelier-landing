@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { MapPin, ArrowUpRight } from '@phosphor-icons/react';
 
-export default function Footer({ isPreloaded = false }) {
+export default function Footer({ isPreloaded = false, isHeroFooter = false }) {
   const [timeStr, setTimeStr] = useState('');
   const footerRef = useRef(null);
 
@@ -42,8 +42,12 @@ export default function Footer({ isPreloaded = false }) {
     return () => ctx.revert();
   }, [isPreloaded]);
 
+  const containerClass = isHeroFooter
+    ? 'hero-footer absolute bottom-0 left-0 right-0 z-20 px-6 md:px-14 pb-5 md:pb-8 bg-transparent pointer-events-auto'
+    : 'footer relative w-full z-50 px-6 md:px-14 py-8 bg-black border-t border-white/10 pointer-events-auto';
+
   return (
-    <footer ref={footerRef} className="footer absolute bottom-0 left-0 right-0 z-50 px-6 md:px-14 pb-5 md:pb-8 bg-transparent pointer-events-auto">
+    <footer ref={footerRef} className={containerClass}>
       <div className="footer-divider w-full h-[1px] bg-white/20 mb-3.5 md:mb-5 opacity-0" />
       <div className="footer-content relative flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 sm:gap-4 font-mono text-[0.75rem] md:text-xs tracking-wider text-white/60 uppercase select-none">
         {/* Left Item */}

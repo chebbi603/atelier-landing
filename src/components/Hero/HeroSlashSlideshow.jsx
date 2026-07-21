@@ -6,7 +6,7 @@ const slideImages = [
   './slides/slide-3.png',
 ];
 
-export default function HeroSlashSlideshow({ isHovered, onHoverChange }) {
+export default function HeroSlashSlideshow({ isHovered, onHoverChange, isScrolling = false }) {
   const [activeSlide, setActiveSlide] = useState(0);
 
   useEffect(() => {
@@ -17,11 +17,20 @@ export default function HeroSlashSlideshow({ isHovered, onHoverChange }) {
     return () => clearInterval(timer);
   }, []);
 
+  const handleMouseEnter = () => {
+    if (!isScrolling) onHoverChange?.(true);
+  };
+
+  const handleMouseLeave = () => {
+    onHoverChange?.(false);
+  };
+
   return (
     <div
-      className={`hero-slash-container hero-center-slash ${isHovered ? 'is-hovered' : ''}`}
-      onMouseEnter={() => onHoverChange?.(true)}
-      onMouseLeave={() => onHoverChange?.(false)}
+      className={`hero-slash-container hero-center-slash ${isHovered && !isScrolling ? 'is-hovered' : ''}`}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      style={{ pointerEvents: isScrolling ? 'none' : 'auto' }}
       aria-label="Interactive slash showcase"
     >
       <div className="hero-slash-frame">
