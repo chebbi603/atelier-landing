@@ -9,6 +9,7 @@ import './styles/index.css';
 export default function App() {
   const [isPreloaded, setIsPreloaded] = useState(false);
   const [showPreloader, setShowPreloader] = useState(true);
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
 
   useEffect(() => {
     // Initialize Lenis Smooth Scroll with custom cubic-bezier easing
@@ -42,8 +43,8 @@ export default function App() {
   return (
     <div className="page">
       {showPreloader && <Preloader onComplete={handlePreloaderComplete} />}
-      <Navbar isPreloaded={isPreloaded} />
-      <Hero isPreloaded={isPreloaded} />
+      <Navbar isPreloaded={isPreloaded} isLightSurging={isButtonHovered} />
+      <Hero isPreloaded={isPreloaded} onHoverChange={setIsButtonHovered} />
       <Footer isPreloaded={isPreloaded} />
     </div>
   );

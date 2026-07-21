@@ -7,16 +7,18 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 11px 22px;
-    background: var(--color-text-primary);
-    color: var(--color-bg-primary);
-    font-family: var(--font-body);
-    font-size: 0.90rem;
+    padding: 12px 22px;
+    background: #ffffff;
+    color: #000000;
+    font-family: 'Clash Grotesk Variable', 'Clash Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.82rem;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
-                box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+                color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+                border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     user-select: none;
     cursor: pointer;
     border-radius: 0px;
@@ -26,14 +28,15 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 11px 22px;
+    padding: 12px 22px;
     background: transparent;
     color: #ffffff;
     border: 1px solid rgba(255, 255, 255, 0.4);
-    font-family: var(--font-body);
-    font-size: 0.90rem;
+    font-family: 'Clash Grotesk Variable', 'Clash Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 0.82rem;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 background-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
                 border-color 0.25s cubic-bezier(0.16, 1, 0.3, 1),
@@ -45,26 +48,40 @@
 
   @media (min-width: 768px) {
     .btn-boxy, .btn-outline {
-      padding: 12px 26px;
-      font-size: 0.90rem;
+      padding: 13px 26px;
+      font-size: 0.85rem;
     }
   }
 
   .btn-text {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     text-transform: uppercase;
-    font-family: var(--font-heading);
+    font-family: 'Clash Grotesk Variable', 'Clash Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 600;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .btn-icon {
+    display: inline-block;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   /* Diagonal skew effect matching the logo slash on hover */
   .btn-boxy:hover {
     background: #F3FF0B;
+    color: #000000;
     transform: skewX(-30deg);
   }
 
   .btn-boxy:hover .btn-text {
     transform: skewX(25deg);
+  }
+
+  /* Align arrow angle parallel to the skewed button container edge (-30deg cut) */
+  .btn-boxy:hover .btn-icon,
+  .btn-outline:hover .btn-icon {
+    transform:  rotate(45deg);
   }
 
   .btn-boxy:active {

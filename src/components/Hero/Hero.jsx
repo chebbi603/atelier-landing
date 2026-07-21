@@ -8,7 +8,7 @@ const cyclingPhrases = [
   'Critical workflows into reliable AI operations.',
 ];
 
-export default function Hero({ isPreloaded = false }) {
+export default function Hero({ isPreloaded = false, onHoverChange }) {
   const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [phraseIndex, setPhraseIndex] = useState(0);
   const heroRef = useRef(null);
@@ -134,8 +134,14 @@ export default function Hero({ isPreloaded = false }) {
         <div className="hero-cta flex flex-col gap-2.5 sm:gap-3 w-full sm:w-[260px] self-start md:self-end mt-1.5 md:mt-0 opacity-0">
           <div
             className="w-full"
-            onMouseEnter={() => setIsButtonHovered(true)}
-            onMouseLeave={() => setIsButtonHovered(false)}
+            onMouseEnter={() => {
+              setIsButtonHovered(true);
+              if (onHoverChange) onHoverChange(true);
+            }}
+            onMouseLeave={() => {
+              setIsButtonHovered(false);
+              if (onHoverChange) onHoverChange(false);
+            }}
           >
             <Button href="#" className="w-full">Start a conversation</Button>
           </div>
