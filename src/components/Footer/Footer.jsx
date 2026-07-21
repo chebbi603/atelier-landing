@@ -43,16 +43,21 @@ export default function Footer({ isPreloaded = false }) {
   }, [isPreloaded]);
 
   return (
-    <footer ref={footerRef} className="footer absolute bottom-0 left-0 right-0 z-50 px-7 md:px-14 pb-6 md:pb-8 bg-transparent pointer-events-auto">
-      <div className="footer-divider w-full h-[1px] bg-white/20 mb-4 md:mb-5 opacity-0" />
-      <div className="footer-content flex flex-wrap items-center justify-between gap-3 font-mono text-[0.7rem] md:text-xs tracking-wider text-white/60 uppercase select-none">
+    <footer ref={footerRef} className="footer absolute bottom-0 left-0 right-0 z-50 px-6 md:px-14 pb-5 md:pb-8 bg-transparent pointer-events-auto">
+      <div className="footer-divider w-full h-[1px] bg-white/20 mb-3.5 md:mb-5 opacity-0" />
+      <div className="footer-content relative flex flex-wrap sm:flex-nowrap items-center justify-between gap-2.5 sm:gap-4 font-mono text-[0.75rem] md:text-xs tracking-wider text-white/60 uppercase select-none">
+        {/* Left Item */}
         <div className="footer-item flex items-center gap-1.5 whitespace-nowrap opacity-0">
           <MapPin size={13} weight="fill" className="text-white/40" />
           <span>ATELIER - PARIS</span>
         </div>
-        <div className="footer-clock font-mono text-white/70 whitespace-nowrap tracking-widest opacity-0">
+
+        {/* Clock - Always in exact geometric center */}
+        <div className="footer-clock sm:absolute sm:left-1/2 sm:-translate-x-1/2 font-mono text-white/75 whitespace-nowrap tracking-widest opacity-0 my-0.5 sm:my-0">
           [&nbsp;<span className="live-pulse-dot text-[#F3FF0B] inline-block animate-pulse">•</span>&nbsp;{timeStr || '00 : 00 : 00'}&nbsp;]
         </div>
+
+        {/* Right Item */}
         <div className="footer-socials flex items-center gap-6 opacity-0">
           <a
             href="https://linkedin.com"

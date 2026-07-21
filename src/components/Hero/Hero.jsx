@@ -25,44 +25,52 @@ export default function Hero({ isPreloaded = false, onHoverChange }) {
         },
       });
 
-      // 1. Hero Title items reveal with staggered blur-in + y-rise
+      // 1. Centerpiece yellow outline slash reveal - super subtle ambient watermark (Desktop only)
+      tl.fromTo(
+        '.hero-center-slash',
+        { opacity: 0 },
+        { opacity: 0.5, duration: 1.2, ease: 'power2.out' },
+        0.1
+      );
+
+      // 2. Hero Title items reveal with staggered blur-in + y-rise
       tl.fromTo(
         '.hero-title-item',
         { opacity: 0, filter: 'blur(20px)', y: 45, scale: 0.95 },
         { opacity: 1, filter: 'blur(0px)', y: 0, scale: 1, stagger: 0.15, duration: 1.3 },
-        0.1
+        0.2
       );
 
-      // 2. AI Icon floating / back-out scale
+      // 3. AI Icon floating / back-out scale
       tl.fromTo(
         '.hero-icon',
         { rotation: -12, scale: 0.7 },
         { rotation: 0, scale: 1, duration: 1.3, ease: 'back.out(1.7)' },
-        0.35
+        0.4
       );
 
-      // 3. Subtitle paragraph blur-in
+      // 4. Subtitle paragraph blur-in
       tl.fromTo(
         '.hero-sub',
         { opacity: 0, filter: 'blur(14px)', y: 30 },
         { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.1 },
-        0.5
+        0.55
       );
 
-      // 4. Prominent cycling accent text blur-in
+      // 5. Prominent cycling accent text blur-in
       tl.fromTo(
         '.hero-tag',
         { opacity: 0, filter: 'blur(12px)', y: 20 },
         { opacity: 1, filter: 'blur(0px)', y: 0, duration: 1.0 },
-        0.65
+        0.7
       );
 
-      // 5. Button stack reveal with blur-in and spring
+      // 6. Button stack reveal with blur-in and spring
       tl.fromTo(
         '.hero-cta',
         { opacity: 0, filter: 'blur(12px)', y: 25, scale: 0.92 },
         { opacity: 1, filter: 'blur(0px)', y: 0, scale: 1, duration: 1.0, ease: 'back.out(1.4)' },
-        0.8
+        0.85
       );
     }, heroRef);
 
@@ -102,6 +110,11 @@ export default function Hero({ isPreloaded = false, onHoverChange }) {
   return (
     <section className="relative w-full h-screen overflow-hidden" ref={heroRef}>
       <DitheringShader isHovered={isButtonHovered} isPreloaded={isPreloaded} />
+
+      {/* Desktop Centerpiece Yellow Outline Slash - Exact Preloader Match & Super Subtle Ambient Watermark */}
+      <div className="hero-center-slash hidden md:block absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none opacity-0">
+        <div className="w-7 h-40 -skew-x-[35deg] border border-[#fff]/35 rounded-[1px] shadow-[0_0_20px_rgba(243,255,11,0.12)]" />
+      </div>
 
       <div className="absolute z-10 bottom-[125px] sm:bottom-28 md:bottom-[calc(var(--space-3xl)+32px)] left-6 right-6 md:left-14 md:right-14 flex flex-col md:flex-row items-start md:items-end justify-between gap-4 md:gap-6">
         <div className="flex flex-col items-start gap-2.5 max-w-[620px]">

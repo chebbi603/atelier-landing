@@ -49,14 +49,12 @@ export default function Preloader({ onComplete }) {
         '-=0.5'
       );
 
-      // 4. Hold on yellow diagonal shape, then fade out with blur
+      // 4. Preloader overlay fades out cleanly (no blur/scale distortion)
       tl.to(containerRef.current, {
         opacity: 0,
-        filter: 'blur(24px)',
-        scale: 1.04,
-        duration: 1.0,
-        ease: 'power3.inOut',
-        delay: 0.25,
+        duration: 0.85,
+        ease: 'power2.inOut',
+        delay: 0.15,
         onStart: () => {
           if (onComplete) onComplete();
         },
@@ -68,9 +66,7 @@ export default function Preloader({ onComplete }) {
       });
     }, containerRef);
 
-    return () => {
-      // Don't kill or revert timeline on StrictMode re-render
-    };
+    return () => {};
   }, []);
 
   return (
@@ -84,7 +80,7 @@ export default function Preloader({ onComplete }) {
           ref={barWrapperRef}
           className="relative w-7 h-40 border border-white/20 overflow-hidden rounded-[1px]"
         >
-          {/* Inner Fill that scales Y and morphs color */}
+          {/* Inner Fill that scales Y */}
           <div
             ref={barFillRef}
             className="w-full h-full bg-white origin-bottom"
